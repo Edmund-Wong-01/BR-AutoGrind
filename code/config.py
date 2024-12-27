@@ -1,24 +1,14 @@
-# Configuration file for settings and parameters
+# config.py
 
-# RGB values with tolerance
-TOOL_RGB_TOLERANCE = 5
-THROTTLE_RED_RGB = (255, 0, 0)  # Throttle red RGB value
+# Pixel positions for various UI elements
+drivePos = (x1, y1)  # Replace with actual coordinates for driving
+loadConsistPos = (x2, y2)  # Coordinates for loading consist
+AWSWarningPos = (x3, y3)  # Replace with actual coordinates for AWS Warning
 
-# Pixel positions (x, y)
-drivePos = (100, 200)  # Example positions
-loadConsistPos = (150, 250)
-consistPos = (200, 300)
-continuePos = (250, 350)
-mainRoutePortion = (300, 400, 100, 100)  # (x, y, width, height)
-secondaryRoutePortion = (400, 500, 100, 100)
-distancePortion = (500, 600, 100, 50)
-currentSpeedPortion = (600, 700, 100, 50)
-speedLimitPortion = (700, 800, 100, 50)
-throttleRedPos = (800, 900)
+# Portions for OCR
+distancePortion = (x4, y4, width, height)  # Coordinates for distance to next station
+currentSpeedPortion = (x5, y5, width, height)  # Coordinates for current speed
+speedLimitPortion = (x6, y6, width, height)  # Coordinates for speed limit
 
-# Control parameters
-accelRate = 0.5  # m/s²
-deccelRate = 1.0  # m/s²
-trainLength = 200  # meters
-trainTopSpeed = 100  # kph
-creepForwardFromBrakeSec = 2  # seconds
+# Other configuration variables
+# You can add more settings as needed
