@@ -1,24 +1,29 @@
-import keyboard  # Make sure to install the keyboard library
-import time
-from menu import main_menu
-from drive import train_control
 
-running = False
+import threading
+import keyboard
+from menu import main as start_menu
+from drive import control_train
 
-def start_process():
-    global running
-    running = True
-    while running:
-        main_menu()
-        train_control()
+def run_program():
+    while not stop_signal.is_set():
+        start_menu()  # Start the menu functionality
+        control_thread = threading.Thread(target=control_train)
+        control_thread.start()
 
-def stop_process():
-    global running
-    running = False
+        # Wait for the control thread to finish
+        control_thread.join()
 
-keyboard.add_hotkey('s', start_process)
-keyboard.add_hotkey('e', stop_process)
+def listen_for_stop():
+    keyboard.wait('q')  # Wait for the user to press 'q' to stop
+    stop_signal.set()  # Signal to stop the program
 
-# Keep the program running
-while True:
-    time.sleep(1)
+if __name__ == "__main__":
+    stop_signal = threading.Event()  # Create a stop signal
+    listener_thread = threading.Thread(target=listen_for_stop)
+    listener_thread.start()  # Start the listener for the stop key
+
+    run_program()  # Run the main program loop
+
+    # Wait for the listener thread to finish
+    listener_thread.join()
+    print("Program stopped.")
