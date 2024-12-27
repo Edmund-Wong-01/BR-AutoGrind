@@ -1,18 +1,22 @@
-THIS IS AI GENERATED
 # BR AutoGrind
+## Please do note that this project has not been tested. Use at your own risk.
+
+## Foreword
+This project is mostly AI generated, so please do expect some bugs and whatnot.
 
 ## Overview
 
-This project automates the control of a train simulation application using Python. It utilizes Optical Character Recognition (OCR) to read critical data from the screen, such as distance to the next station, current speed, and speed limit. The program also interacts with the user interface through mouse clicks and keyboard inputs.
-
+This project automates British Railway, a Roblox train simulation game. 
 ## Features
 
-- Clicks on specific pixel positions in the UI to navigate through menus.
-- Takes screenshots of defined screen portions to extract text data using OCR.
-- Calculates route ratios and determines optimal paths based on the extracted data.
-- Controls train acceleration and deceleration based on distance, speed, and speed limits.
-- Opens train doors when the train is fully in a station and waits for loading completion.
+- Finds the most optimal route (points per second)
+- Sticks to speed limit
+- Acknowledge AWS Warnings
+- Open and close doors
 
+## Caveats 
+- It does NOT have guard capabilities
+- It does NOT obey danger aspects. Therefore it only works on *PRIVATE SERVERS*
 ## Requirements
 
 - Python 3.x
