@@ -13,10 +13,12 @@ This project automates British Railway, a Roblox train simulation game.
 - Sticks to speed limit
 - Acknowledge AWS Warnings
 - Open and close doors
+- Can move forward if train is not fully in station.
 
 ## Caveats 
 - It does NOT have guard capabilities
-- It does NOT obey danger aspects. Therefore it only works on *PRIVATE SERVERS*
+- It does NOT obey danger aspects. Therefore it only works on **PRIVATE SERVERS**
+- It does NOT stop at car markers, however it  will nudge forward if the train's not fully in the platform.
 ## Requirements
 
 - Python 3.x
