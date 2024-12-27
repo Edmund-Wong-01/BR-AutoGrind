@@ -1,4 +1,3 @@
-```markdown
 # BR AutoGrind
 
 ## Overview
@@ -110,12 +109,3 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 - [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract) for OCR capabilities.
 - [OpenCV](https://opencv.org/) for image processing functionalities.
 - [PyAutoGUI](https://pyautogui.readthedocs.io/) for mouse and keyboard automation.
-```
-
-### Saving the File
-1. Open a text editor or an IDE.
-2. Copy the content above.
-3. Paste it into a new file.
-4. Save the file as `README.md` in your project directory.
-
-This README provides a structured guide for users to install, configure, and use your project effectively.
