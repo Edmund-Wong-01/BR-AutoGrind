@@ -1,7 +1,7 @@
 import time
 import pyautogui
 import pytesseract
-from config import *
+from config import *  # Import all configurations
 
 def click_pixel(pixel_pos):
     pyautogui.click(pixel_pos)
@@ -14,24 +14,19 @@ def read_number(filename):
     image = pytesseract.image_to_string(filename)
     return int(image) if image.isdigit() else 0
 
-def screen_matches(target_image_path, region):
-    screenshot = pyautogui.screenshot(region=region)
-    screenshot.save("temp_screenshot.png")
-    return pyautogui.locateOnScreen(target_image_path, confidence=0.8) is not None
-
 def control_train():
     global lastStation
     lastStation = 0
 
     while True:
-        click_pixel(AWSWarningPos)
+        click_pixel(AWSWarningPos)  # Click to acknowledge AWS warning
         take_screenshot(DistancePortion, "nextStationDist.png")
         
         # Read distance; default to 0 if OCR fails
         NextStationDist = read_number("nextStationDist.png")
         NextStationDist = NextStationDist if NextStationDist > 0 else 0
         
-        # Add TrainLength to the distance
+        # Add TrainLength to the distance to account for the full train
         NextStationDist += TrainLength  # Adjust for train length
 
         take_screenshot(CurrentSpeedPortion, "currentSpeed.png")
@@ -43,21 +38,24 @@ def control_train():
         # Train control logic
         while NextStationDist > 0:
             if CurrentSpeed < SpeedLimit:
-                pyautogui.keyDown('w')
+                pyautogui.keyDown('w')  # Accelerate
                 time.sleep(0.1)  # Delay for acceleration
             elif CurrentSpeed > SpeedLimit:
-                pyautogui.keyDown('s')
+                pyautogui.keyDown('s')  # Decelerate
                 time.sleep(0.1)
 
             # Update screenshots and values
             take_screenshot(DistancePortion, "nextStationDist.png")
             NextStationDist = read_number("nextStationDist.png")
             NextStationDist = NextStationDist if NextStationDist > 0 else 0  # Default to 0 if OCR fails
+            
+            # Again, adjust for train length
             NextStationDist += TrainLength  # Adjust for train length
         
         pyautogui.press('t')  # Open doors
         take_screenshot("openDoor.png")
 
+        # Check if the train is fully in the station
         if "Your train must be fully in a station to open doors" in pytesseract.image_to_string("openDoor.png"):
             pyautogui.keyDown('w')
             time.sleep(creepForwardFromBrakeSec)
@@ -69,7 +67,7 @@ def control_train():
             while "loading complete" not in pytesseract.image_to_string("checkForCloseDoors.png"):
                 take_screenshot("checkForCloseDoors.png")
 
-        # Check for the specific condition to set lastStation
+        # Check for specific condition to set lastStation
         if screen_matches("target_image.png", (x, y, width, height)):  # Replace with actual values
             lastStation = 1
             break  # Exit the loop once condition is met
