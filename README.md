@@ -77,7 +77,7 @@ sudo apt-get install tesseract-ocr
 
 If Tesseract is not in your system's PATH, set its path in your script:
 
-In `drive.py`, add the following line:
+In `drive.py` and `menu.py`, add the following line:
 
 ```python
 pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'  # Update with your path
