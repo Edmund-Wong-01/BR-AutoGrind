@@ -41,11 +41,16 @@ cd train-control-automation
 
 ### Step 2: Install Python Packages
 
-Ensure you have `pip` installed, then run:
+Ensure you have `pip` installed, then run this command:
 
 ```bash
-pip install pytesseract opencv-python pyautogui keyboard
+pip install pyautogui
+pip install pytesseract
+pip install keyboard
+pip install Pillow
 ```
+
+
 
 ### Step 3: Install Tesseract-OCR
 
