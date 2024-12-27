@@ -1,5 +1,5 @@
-# BR-AutoGrind
-Please note this is made by AI.
+```markdown
+# BR AutoGrind
 
 ## Overview
 
@@ -22,10 +22,100 @@ This project automates the control of a train simulation application using Pytho
 - `keyboard` for simulating keyboard inputs
 - Tesseract-OCR installed on your system
 
-## Installation
+## Installation Instructions
 
-1. Clone the repository:
+### Step 1: Clone the Repository
+
+Open your terminal and run the following command to clone the repository:
+
+```bash
+git clone https://github.com/yourusername/train-control-automation.git
+cd train-control-automation
+```
+
+### Step 2: Install Python Packages
+
+Ensure you have `pip` installed, then run:
+
+```bash
+pip install pytesseract opencv-python pyautogui keyboard
+```
+
+### Step 3: Install Tesseract-OCR
+
+#### For Windows:
+1. Download the installer from [Tesseract at UB Mannheim](https://github.com/UB-Mannheim/tesseract/wiki).
+2. Install it and note the installation path (e.g., `C:\Program Files\Tesseract-OCR`).
+3. Add the Tesseract installation path to your system's PATH environment variable.
+
+#### For macOS:
+Use Homebrew to install Tesseract:
+
+```bash
+brew install tesseract
+```
+
+#### For Linux:
+Install Tesseract using the package manager:
+
+```bash
+sudo apt-get install tesseract-ocr
+```
+
+### Step 4: Configure Tesseract Path in Code
+
+If Tesseract is not in your system's PATH, set its path in your script:
+
+In `drive.py`, add the following line:
+
+```python
+pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'  # Update with your path
+```
+
+### Step 5: Configure Pixel Positions
+
+Open `config.py` and set the pixel positions and parameters according to your application’s UI layout. Make sure to adjust values like `drivePos`, `loadConsistPos`, and other portions to match the actual coordinates on your screen.
+
+## Usage Instructions
+
+1. **Start the Application**: Run the main script:
 
    ```bash
-   git clone https://github.com/yourusername/train-control-automation.git
-   cd train-control-automation
+   python main.py
+   ```
+
+2. **Control the Automation**:
+   - Press **`s`** to start the train control process.
+   - Press **`e`** to stop the automation at any time.
+
+3. **Monitor Output**: The program will log its actions in the console. Check for any errors or required adjustments based on your screen's response.
+
+## Code Structure
+
+- **`config.py`**: Contains configuration variables such as pixel positions and control parameters.
+- **`menu.py`**: Handles interactions with the application’s menu, including clicking buttons and taking screenshots.
+- **`drive.py`**: Manages the train control logic, including reading distances, speeds, and speed limits.
+- **`main.py`**: The entry point that starts the automation process and manages user input for starting and stopping the automation.
+
+## Contribution
+
+Contributions are welcome! Feel free to fork the repository and submit pull requests for improvements or new features.
+
+## License
+
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract) for OCR capabilities.
+- [OpenCV](https://opencv.org/) for image processing functionalities.
+- [PyAutoGUI](https://pyautogui.readthedocs.io/) for mouse and keyboard automation.
+```
+
+### Saving the File
+1. Open a text editor or an IDE.
+2. Copy the content above.
+3. Paste it into a new file.
+4. Save the file as `README.md` in your project directory.
+
+This README provides a structured guide for users to install, configure, and use your project effectively.
