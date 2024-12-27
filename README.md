@@ -108,16 +108,6 @@ Open `config.py` and set the pixel positions and parameters according to your ap
 - **`drive.py`**: Manages the train control logic, including reading distances, speeds, and speed limits.
 - **`main.py`**: The entry point that starts the automation process and manages user input for starting and stopping the automation.
 
-## Contribution
-
-Contributions are welcome! Feel free to fork the repository and submit pull requests for improvements or new features.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
-## Acknowledgements
-
-- [Tesseract-OCR](https://github.com/tesseract-ocr/tesseract) for OCR capabilities.
-- [OpenCV](https://opencv.org/) for image processing functionalities.
-- [PyAutoGUI](https://pyautogui.readthedocs.io/) for mouse and keyboard automation.
