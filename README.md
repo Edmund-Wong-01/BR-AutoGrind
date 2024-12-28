@@ -9,17 +9,18 @@ This project is mostly AI generated, so please do expect some bugs and whatnot.
 This project automates British Railway, a Roblox train simulation game. 
 ## Features
 
-- Finds the most optimal route (points per minute)
-- Sticks to speed limit
-- Acknowledge AWS Warnings
-- Open and close doors
+- Finds the most optimal route. (points per minute)
+- Sticks to speed limit.
+- Acknowledge AWS Warnings.
+- Open and close doors.
 - Can move forward if train is not fully in station.
-- Utilizes analog brake and throttle
+- Utilizes analog brake and throttle.
 
 ## Caveats 
-- It does NOT have guard capabilities
+- It does NOT have guard capabilities.
 - It does NOT obey danger aspects. Therefore it only works on **PRIVATE SERVERS**
 - It does NOT stop at car markers, however it  will nudge forward if the train's not fully in the platform.
+- It does NOT know what to do when Roblox crashes.
 
 ## To-do 
 - Stop at markers
