@@ -19,6 +19,10 @@ This project automates British Railway, a Roblox train simulation game.
 - It does NOT have guard capabilities
 - It does NOT obey danger aspects. Therefore it only works on **PRIVATE SERVERS**
 - It does NOT stop at car markers, however it  will nudge forward if the train's not fully in the platform.
+
+## To-do 
+- Stop at markers
+
 ## Requirements
 
 - Python 3.x
