@@ -9,7 +9,7 @@ BRAKE_STEPS = 5     # Steps from OFF (0) to MAX (4)
 
 # Initialize throttle and brake levels
 throttle_level = 0
-brake_level = 0
+brake_level = 4
 lastStation = 0  # Initialize lastStation
 
 def click_pixel(pixel_pos):
@@ -22,6 +22,10 @@ def take_screenshot(portion, filename):
 def read_number(filename):
     image = pytesseract.image_to_string(filename)
     return int(image) if image.isdigit() else 0
+
+def calculate_braking_distance(current_speed):
+    # Calculate the distance needed to stop based on deceleration rate
+    return (current_speed ** 2) / (2 * decelRate)
 
 def control_train():
     global lastStation
@@ -47,18 +51,24 @@ def control_train():
 
         # Control loop for throttle and brake
         while NextStationDist > 0:
-            # Adjust throttle based on throttle level
-            if throttle_level > 0:
+            # Apply full throttle when trying to reach speed limit
+            if CurrentSpeed < SpeedLimit:
+                throttle_level = THROTTLE_STEPS - 1  # Set to full throttle
                 pyautogui.keyDown('w')  # Apply throttle
-                time.sleep(0.1 * throttle_level)  # Adjust acceleration duration based on throttle level
+                time.sleep(0.1 * throttle_level)  # Adjust acceleration duration
             else:
                 pyautogui.keyUp('w')  # No throttle applied
 
-            # If braking, set throttle to 0
-            if brake_level > 0:
-                throttle_level = 0
+            # Calculate the required braking distance
+            braking_distance = calculate_braking_distance(CurrentSpeed)
+
+            # If approaching station, apply brakes based on distance
+            if NextStationDist < braking_distance + 100:  # 100m buffer; adjust as necessary
+                if brake_level < BRAKE_STEPS - 1:
+                    time.sleep(1)  # Wait 1 second before going to max brake
+                    brake_level = BRAKE_STEPS - 1  # Set to max brake
                 pyautogui.keyDown('s')  # Apply brake
-                time.sleep(0.1 * brake_level)  # Adjust braking duration based on brake level
+                time.sleep(0.1 * brake_level)  # Adjust braking duration
             else:
                 pyautogui.keyUp('s')  # No brake applied
 
@@ -106,9 +116,7 @@ def control_train():
             lastStation = 1  # Set lastStation to 1 to exit the loop
             break  # Exit the loop to end the control process
 
-        # Control input for throttle and brake (this section should be called in an appropriate context)
-        # Here, you can add keyboard listeners or input checks for 'w', 's', 'a', and 'd'
-        # For example:
+        # Control input for throttle and brake (this section should be checked in an appropriate context)
         if pyautogui.keyDown('w') and throttle_level < THROTTLE_STEPS - 1:
             throttle_level += 1  # Increase throttle level
         if pyautogui.keyDown('s') and throttle_level > 0:
