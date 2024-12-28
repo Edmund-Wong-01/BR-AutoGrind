@@ -25,3 +25,10 @@ AccelRate = 0.7 # m/s²
 DecelRate = 1.2 # m/s²
 TrainLength = 132.0  # meters
 TrainTopSpeed = 201 # kph
+# Maximum throttle and brake values
+MAX_THROTTLE = 100  # Maximum throttle level (0-100)
+MAX_BRAKE = 100     # Maximum brake level (0-100)
+
+# Acceleration and deceleration rates (units per second)
+accelRate = 5       # Rate at which the train accelerates (units/s)
+decelRate = 10      # Rate at which the train decelerates (units/s)
