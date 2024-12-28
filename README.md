@@ -9,7 +9,7 @@ This project is mostly AI generated, so please do expect some bugs and whatnot.
 This project automates British Railway, a Roblox train simulation game. 
 ## Features
 
-- Finds the most optimal route (points per second)
+- Finds the most optimal route (points per minute)
 - Sticks to speed limit
 - Acknowledge AWS Warnings
 - Open and close doors
