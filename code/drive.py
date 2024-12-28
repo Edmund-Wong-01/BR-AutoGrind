@@ -1,12 +1,16 @@
 import time
 import pyautogui
 import pytesseract
-import keyboard  # For detecting key presses
 from config import *  # Import all configurations
 
+# Define throttle and brake levels
+THROTTLE_STEPS = 7  # Steps from OFF (0) to FULL (6)
+BRAKE_STEPS = 5     # Steps from OFF (0) to MAX (4)
+
 # Initialize throttle and brake levels
-current_throttle = 0
-current_brake = 0
+throttle_level = 0
+brake_level = 0
+lastStation = 0  # Initialize lastStation
 
 def click_pixel(pixel_pos):
     pyautogui.click(pixel_pos)
@@ -19,83 +23,100 @@ def read_number(filename):
     image = pytesseract.image_to_string(filename)
     return int(image) if image.isdigit() else 0
 
-def adjust_throttle(increment):
-    global current_throttle
-    if current_brake > 0:
-        current_throttle = 0  # Set throttle to 0 if braking
-    else:
-        new_throttle = current_throttle + increment
-        if 0 <= new_throttle <= MAX_THROTTLE:
-            current_throttle = new_throttle
-            print(f"Throttle level: {current_throttle}")
-
-def adjust_brake(increment):
-    global current_brake
-    if current_throttle > 0:
-        current_brake = 0  # Set brake to 0 when accelerating
-    new_brake = current_brake + increment
-    if 0 <= new_brake <= MAX_BRAKE:
-        current_brake = new_brake
-        print(f"Brake level: {current_brake}")
-
 def control_train():
     global lastStation
-    lastStation = 0
 
+    # Initial click to acknowledge AWS warning
     click_pixel(AWSWarningPos)
 
-    while True:
+    # Main control loop
+    while lastStation == 0:  # Repeat until lastStation is set to 1
+        # Click the AWS warning every second if it exists
         time.sleep(1)
         click_pixel(AWSWarningPos)
 
-        while True:
-            # Capture and read distances and speeds
+        take_screenshot(DistancePortion, "nextStationDist.png")
+        NextStationDist = read_number("nextStationDist.png")
+        NextStationDist = max(0, NextStationDist + TrainLength)  # Adjust for train length
+
+        take_screenshot(CurrentSpeedPortion, "currentSpeed.png")
+        CurrentSpeed = read_number("currentSpeed.png")
+
+        take_screenshot(SpeedLimitPortion, "speedLimit.png")
+        SpeedLimit = read_number("speedLimit.png")
+
+        # Control loop for throttle and brake
+        while NextStationDist > 0:
+            # Adjust throttle based on throttle level
+            if throttle_level > 0:
+                pyautogui.keyDown('w')  # Apply throttle
+                time.sleep(0.1 * throttle_level)  # Adjust acceleration duration based on throttle level
+            else:
+                pyautogui.keyUp('w')  # No throttle applied
+
+            # If braking, set throttle to 0
+            if brake_level > 0:
+                throttle_level = 0
+                pyautogui.keyDown('s')  # Apply brake
+                time.sleep(0.1 * brake_level)  # Adjust braking duration based on brake level
+            else:
+                pyautogui.keyUp('s')  # No brake applied
+
+            # Update distance
             take_screenshot(DistancePortion, "nextStationDist.png")
             NextStationDist = read_number("nextStationDist.png")
-            NextStationDist = NextStationDist if NextStationDist > 0 else 0
-            
-            # Add TrainLength to the distance
-            NextStationDist += TrainLength
+            NextStationDist = max(0, NextStationDist + TrainLength)  # Adjust for train length
 
-            take_screenshot(CurrentSpeedPortion, "currentSpeed.png")
-            CurrentSpeed = read_number("currentSpeed.png")
+        # Wait for a second before pressing 't' to open doors
+        time.sleep(1)
+        pyautogui.press('t')  # Attempt to open doors
+        take_screenshot("openDoor.png")
 
-            take_screenshot(SpeedLimitPortion, "speedLimit.png")
-            SpeedLimit = read_number("speedLimit.png")
+        # Check if the train is fully in the station
+        while True:
+            take_screenshot("openDoor.png")
+            door_status = pytesseract.image_to_string("openDoor.png")
 
-            # Calculate stopping distance based on current speed and deceleration rate
-            stopping_distance = (CurrentSpeed ** 2) / (2 * decelRate)
+            if "You must be stopped to open doors." in door_status:
+                break  # Exit the loop if the condition is met
 
-            # Automatic stopping logic
-            if NextStationDist <= stopping_distance + 10:  # Start braking when close to stopping distance
-                adjust_brake(1)  # Apply brakes gradually
-                adjust_throttle(0)  # Ensure throttle is 0
-            elif CurrentSpeed > SpeedLimit:  # If speeding
-                adjust_brake(1)  # Apply brakes
-            elif CurrentSpeed < SpeedLimit and current_brake == 0:
-                adjust_throttle(1)  # Accelerate if below the speed limit
+            # If not fully in station, continue moving slightly forward
+            pyautogui.keyDown('w')  # Move forward
+            time.sleep(creepForwardFromBrakeSec)
 
-            # User control for throttle and brake
-            if keyboard.is_pressed('w'):
-                adjust_throttle(1)  # Increase throttle
-                time.sleep(0.1)  # Delay to prevent rapid increments
-            elif keyboard.is_pressed('s'):
-                adjust_throttle(-1)  # Decrease throttle
-                time.sleep(0.1)
+        # Once the train is completely in the station, hold 's' for 1 second
+        time.sleep(1)
+        pyautogui.keyDown('s')  # Hold 's' to decelerate
+        time.sleep(1)  # Hold for another second
+        pyautogui.keyUp('s')  # Release 's'
 
-            if keyboard.is_pressed('a'):
-                adjust_brake(1)  # Increase brake
-                adjust_throttle(0)  # Set throttle to 0 while braking
-                time.sleep(0.1)
-            elif keyboard.is_pressed('d'):
-                adjust_brake(-1)  # Decrease brake
-                time.sleep(0.1)
+        # Wait for a second before pressing 't' to open doors
+        time.sleep(1)
+        pyautogui.press('t')  # Attempt to open doors
 
-            # Check if the train has reached the station
-            if NextStationDist <= 0 and CurrentSpeed == 0:
-                time.sleep(1)  # Wait before trying to open doors
-                pyautogui.press('t')  # Open doors
-                break  # Exit the loop after opening doors
+        # Handle the case when loading is complete
+        if lastStation == 0:
+            # Wait for a second before checking for loading complete
+            time.sleep(1)
+            while "loading complete" not in pytesseract.image_to_string("checkForCloseDoors.png"):
+                take_screenshot("checkForCloseDoors.png")
+
+        # Check for specific condition to set lastStation
+        if screen_matches("target_image.png", (x, y, width, height)):  # Replace with actual values
+            lastStation = 1  # Set lastStation to 1 to exit the loop
+            break  # Exit the loop to end the control process
+
+        # Control input for throttle and brake (this section should be called in an appropriate context)
+        # Here, you can add keyboard listeners or input checks for 'w', 's', 'a', and 'd'
+        # For example:
+        if pyautogui.keyDown('w') and throttle_level < THROTTLE_STEPS - 1:
+            throttle_level += 1  # Increase throttle level
+        if pyautogui.keyDown('s') and throttle_level > 0:
+            throttle_level -= 1  # Decrease throttle level
+        if pyautogui.keyDown('a') and brake_level < BRAKE_STEPS - 1:
+            brake_level += 1  # Increase brake level
+        if pyautogui.keyDown('d') and brake_level > 0:
+            brake_level -= 1  # Decrease brake level
 
 if __name__ == "__main__":
     control_train()
