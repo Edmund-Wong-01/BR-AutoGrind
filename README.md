@@ -14,6 +14,7 @@ This project automates British Railway, a Roblox train simulation game.
 - Acknowledge AWS Warnings
 - Open and close doors
 - Can move forward if train is not fully in station.
+- Utilizes analog brake and throttle
 
 ## Caveats 
 - It does NOT have guard capabilities
@@ -22,6 +23,9 @@ This project automates British Railway, a Roblox train simulation game.
 
 ## To-do 
 - Stop at markers
+
+## Settings in BR
+- Set to seperate throttle and brake
 
 ## Requirements
 
