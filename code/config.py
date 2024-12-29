@@ -11,6 +11,25 @@ ContinuePos = (x4, y4)
 ThrottleRedPos = (x5, y5)
 AWSWarningPos = (x6, y6)
 
+DESTINATION_PORTION = (100, 200, 300, 400)  # (x, y, width, height)
+
+# Screen portion for routes
+ROUTE_PORTION = (500, 200, 300, 400)  # (x, y, width, height)
+
+# Spacing between occurrences of "mins"
+MINS_SPACING = 30  # Adjust based on your screen layout
+
+# Sleep time between actions
+SLEEP_TIME = 1  # seconds
+
+# Define pixel positions for various actions
+drivePos = (100, 150)          # Coordinates for Drive button
+loadConsistPos = (200, 150)   # Coordinates for Load Consist button
+consistPos = (300, 150)       # Coordinates for Consist button
+continuePos = (400, 150)      # Coordinates for Continue button
+throttleRedPos = (500, 150)   # Coordinates for Throttle Red indicator
+throttleRedRGB = (255, 0, 0)  # RGB values for the Throttle Red indicator
+
 # Screenshot portions
 # Start at top left corner, adjust width and height for screenshot size
 MainRoutePortion = (x_start, y_start, width, height)
