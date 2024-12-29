@@ -1,53 +1,36 @@
-# Configurations and customizable settings
+# config.py
 
-# RGB Tolerance
-RGB_TOLERANCE = 5
+# Positions
+awsWarningPos = (100, 200)  # Example coordinates
+distancePortion = (150, 250, 300, 400)  # Example region (x, y, width, height)
+currentSpeedPortion = (200, 300, 400, 500)
+speedLimitPortion = (250, 350, 450, 550)
+trainLength = 50  # Length of the train in meters
+creepForwardFromBrakeSec = 1  # Time to creep forward after braking
 
-# Pixel positions
-DrivePos = (x1, y1)
-LoadConsistPos = (x2, y2)
-ConsistPos = (x3, y3)
-ContinuePos = (x4, y4)
-ThrottleRedPos = (x5, y5)
-AWSWarningPos = (x6, y6)
+# RGB Values
+throttleRedRGB = (255, 0, 0)  # Example RGB value
+throttleGreenRGB = (0, 255, 0)
+rgbTolerance = 10  # Example tolerance value for RGB comparisons
 
-DESTINATION_PORTION = (100, 200, 300, 400)  # (x, y, width, height)
+# Rates
+decelRate = 1.5  # Example deceleration rate
 
-# Screen portion for routes
-ROUTE_PORTION = (500, 200, 300, 400)  # (x, y, width, height)
+# Lengths
+trainLength = 100  # Length of the train in meters
 
-# Spacing between occurrences of "mins"
-MINS_SPACING = 30  # Adjust based on your screen layout
+# Throttle and Brake Steps
+throttleSteps = 7  # Steps from OFF (0) to FULL (6)
+brakeSteps = 5     # Steps from OFF (0) to MAX (4)
 
-# Sleep time between actions
-SLEEP_TIME = 1  # seconds
+# Portions for screenshots
+distancePortion = (100, 100, 200, 200)  # Example portion
+currentSpeedPortion = (200, 200, 200, 200)
+speedLimitPortion = (300, 300, 200, 200)
 
-# Define pixel positions for various actions
-drivePos = (100, 150)          # Coordinates for Drive button
-loadConsistPos = (200, 150)   # Coordinates for Load Consist button
-consistPos = (300, 150)       # Coordinates for Consist button
-continuePos = (400, 150)      # Coordinates for Continue button
-throttleRedPos = (500, 150)   # Coordinates for Throttle Red indicator
-throttleRedRGB = (255, 0, 0)  # RGB values for the Throttle Red indicator
+# Speeds
+currentSpeed = 0  # Initial current speed
+speedLimit = 100  # Example speed limit
 
-# Screenshot portions
-# Start at top left corner, adjust width and height for screenshot size
-MainRoutePortion = (x_start, y_start, width, height)
-SecondaryRoutePortion = (x_start2, y_start2, width2, height2)
-DistancePortion = (x_start3, y_start3, width3, height3)
-CurrentSpeedPortion = (x_start4, y_start4, width4, height4)
-SpeedLimitPortion = (x_start5, y_start5, width5, height5)
-
-# Train specifications
-# Find at BR Wiki for that train (currently set to class 800)
-AccelRate = 0.7 # m/s²
-DecelRate = 1.2 # m/s²
-TrainLength = 132.0  # meters
-TrainTopSpeed = 201 # kph
-# Maximum throttle and brake values
-MAX_THROTTLE = 100  # Maximum throttle level (0-100)
-MAX_BRAKE = 100     # Maximum brake level (0-100)
-
-# Acceleration and deceleration rates (units per second)
-accelRate = 5       # Rate at which the train accelerates (units/s)
-decelRate = 10      # Rate at which the train decelerates (units/s)
+# Spacing
+minsSpacing = 10  # Example spacing value
