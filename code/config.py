@@ -1,7 +1,7 @@
 # config.py
 
 # Positions
-awsWarningPos = (100, 200)  # Example coordinates
+awsWarningPos=(100, 200)  # Example coordinates
 distancePortion = (150, 250, 300, 400)  # Example region (x, y, width, height)
 currentSpeedPortion = (200, 300, 400, 500)
 speedLimitPortion = (250, 350, 450, 550)
