@@ -4,90 +4,90 @@ import pytesseract
 from config import *  # Import all configurations
 
 # Define throttle and brake levels
-THROTTLE_STEPS = 7  # Steps from OFF (0) to FULL (6)
-BRAKE_STEPS = 5     # Steps from OFF (0) to MAX (4)
+throttleSteps = 7  # Steps from OFF (0) to FULL (6)
+brakeSteps = 5     # Steps from OFF (0) to MAX (4)
 
 # Initialize throttle and brake levels
-throttle_level = 0
-brake_level = 4
+throttleLevel = 0
+brakeLevel = 4
 lastStation = 0  # Initialize lastStation
 
-def click_pixel(pixel_pos):
-    pyautogui.click(pixel_pos)
+def clickPixel(pixelPos):
+    pyautogui.click(pixelPos)
 
-def take_screenshot(portion, filename):
+def takeScreenshot(portion, filename):
     screenshot = pyautogui.screenshot(region=portion)
     screenshot.save(filename)
 
-def read_number(filename):
+def readNumber(filename):
     image = pytesseract.image_to_string(filename)
     return int(image) if image.isdigit() else 0
 
-def calculate_braking_distance(current_speed):
+def calculateBrakingDistance(currentSpeed):
     # Calculate the distance needed to stop based on deceleration rate
-    return (current_speed ** 2) / (2 * decelRate)
+    return (currentSpeed ** 2) / (2 * decelRate)
 
-def control_train():
+def controlTrain():
     global lastStation
 
     # Initial click to acknowledge AWS warning
-    click_pixel(AWSWarningPos)
+    clickPixel(AWSWarningPos)
 
     # Main control loop
     while lastStation == 0:  # Repeat until lastStation is set to 1
         # Click the AWS warning every second if it exists
         time.sleep(1)
-        click_pixel(AWSWarningPos)
+        clickPixel(AWSWarningPos)
 
-        take_screenshot(DistancePortion, "nextStationDist.png")
-        NextStationDist = read_number("nextStationDist.png")
-        NextStationDist = max(0, NextStationDist + TrainLength)  # Adjust for train length
+        takeScreenshot(distancePortion, "nextStationDist.png")
+        nextStationDist = readNumber("nextStationDist.png")
+        nextStationDist = max(0, nextStationDist + trainLength)  # Adjust for train length
 
-        take_screenshot(CurrentSpeedPortion, "currentSpeed.png")
-        CurrentSpeed = read_number("currentSpeed.png")
+        takeScreenshot(currentSpeedPortion, "currentSpeed.png")
+        currentSpeed = readNumber("currentSpeed.png")
 
-        take_screenshot(SpeedLimitPortion, "speedLimit.png")
-        SpeedLimit = read_number("speedLimit.png")
+        takeScreenshot(speedLimitPortion, "speedLimit.png")
+        speedLimit = readNumber("speedLimit.png")
 
         # Control loop for throttle and brake
-        while NextStationDist > 0:
+        while nextStationDist > 0:
             # Apply full throttle when trying to reach speed limit
-            if CurrentSpeed < SpeedLimit:
-                throttle_level = THROTTLE_STEPS - 1  # Set to full throttle
+            if currentSpeed < speedLimit:
+                throttleLevel = throttleSteps - 1  # Set to full throttle
                 pyautogui.keyDown('w')  # Apply throttle
-                time.sleep(0.1 * throttle_level)  # Adjust acceleration duration
+                time.sleep(0.1 * throttleLevel)  # Adjust acceleration duration
             else:
                 pyautogui.keyUp('w')  # No throttle applied
 
             # Calculate the required braking distance
-            braking_distance = calculate_braking_distance(CurrentSpeed)
+            brakingDistance = calculateBrakingDistance(currentSpeed)
 
             # If approaching station, apply brakes based on distance
-            if NextStationDist < braking_distance + 100:  # 100m buffer; adjust as necessary
-                if brake_level < BRAKE_STEPS - 1:
+            if nextStationDist < brakingDistance + 100:  # 100m buffer; adjust as necessary
+                if brakeLevel < brakeSteps - 1:
                     time.sleep(1)  # Wait 1 second before going to max brake
-                    brake_level = BRAKE_STEPS - 1  # Set to max brake
+                    brakeLevel = brakeSteps - 1  # Set to max brake
                 pyautogui.keyDown('s')  # Apply brake
-                time.sleep(0.1 * brake_level)  # Adjust braking duration
+                time.sleep(0.1 * brakeLevel)  # Adjust braking duration
             else:
                 pyautogui.keyUp('s')  # No brake applied
 
             # Update distance
-            take_screenshot(DistancePortion, "nextStationDist.png")
-            NextStationDist = read_number("nextStationDist.png")
-            NextStationDist = max(0, NextStationDist + TrainLength)  # Adjust for train length
+            takeScreenshot(distancePortion, "nextStationDist.png")
+            nextStationDist = readNumber("nextStationDist.png")
+            nextStationDist = max(0, nextStationDist + trainLength)  # Adjust for train length
 
         # Wait for a second before pressing 't' to open doors
         time.sleep(1)
         pyautogui.press('t')  # Attempt to open doors
-        take_screenshot("openDoor.png")
+        takeScreenshot("openDoor.png")
 
         # Check if the train is fully in the station
         while True:
-            take_screenshot("openDoor.png")
-            door_status = pytesseract.image_to_string("openDoor.png")
+            takeScreenshot("openDoor.png")
+            doorStatus = pytesseract.image_to_string("openDoor.png")
 
-            if "You must be stopped to open doors." in door_status:
+            if "You must be stopped to open doors." in doorStatus:
                 break  # Exit the loop if the condition is met
 
             # If not fully in station, continue moving slightly forward
@@ -109,7 +109,7 @@ def control_train():
             # Wait for a second before checking for loading complete
             time.sleep(1)
             while "loading complete" not in pytesseract.image_to_string("checkForCloseDoors.png"):
-                take_screenshot("checkForCloseDoors.png")
+                takeScreenshot("checkForCloseDoors.png")
 
         # Check for specific condition to set lastStation
         if screen_matches("target_image.png", (x, y, width, height)):  # Replace with actual values
@@ -117,14 +117,14 @@ def control_train():
             break  # Exit the loop to end the control process
 
         # Control input for throttle and brake (this section should be checked in an appropriate context)
-        if pyautogui.keyDown('w') and throttle_level < THROTTLE_STEPS - 1:
-            throttle_level += 1  # Increase throttle level
-        if pyautogui.keyDown('s') and throttle_level > 0:
-            throttle_level -= 1  # Decrease throttle level
-        if pyautogui.keyDown('a') and brake_level < BRAKE_STEPS - 1:
-            brake_level += 1  # Increase brake level
-        if pyautogui.keyDown('d') and brake_level > 0:
-            brake_level -= 1  # Decrease brake level
+        if pyautogui.keyDown('w') and throttleLevel < throttleSteps - 1:
+            throttleLevel += 1  # Increase throttle level
+        if pyautogui.keyDown('s') and throttleLevel > 0:
+            throttleLevel -= 1  # Decrease throttle level
+        if pyautogui.keyDown('a') and brakeLevel < brakeSteps - 1:
+            brakeLevel += 1  # Increase brake level
+        if pyautogui.keyDown('d') and brakeLevel > 0:
+            brakeLevel -= 1  # Decrease brake level
 
 if __name__ == "__main__":
-    control_train()
+    controlTrain()
