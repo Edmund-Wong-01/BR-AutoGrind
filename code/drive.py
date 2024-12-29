@@ -5,7 +5,7 @@ from config import *  # Import all configurations
 
 # Define throttle and brake levels
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
-brakeSteps = 5     # Steps from OFF (0) to MAX (4)
+brakeSteps = 4     # Steps from OFF (0) to MAX (4)
 
 # Initialize throttle and brake levels
 throttleLevel = 0
