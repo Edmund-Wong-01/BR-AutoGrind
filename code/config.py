@@ -17,7 +17,7 @@ rgbTolerance = 10  # Example tolerance value for RGB comparisons
 decelRate = 1.2  # Example deceleration rate
 
 # Lengths
-trainLength = 100  # Length of the train in meters
+trainLength = 132  # Length of the train in meters
 
 # Throttle and Brake Steps
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
