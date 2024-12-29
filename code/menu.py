@@ -2,31 +2,31 @@ import time
 import pyautogui
 import pytesseract
 import re
-from config import DESTINATION_PORTION, ROUTE_PORTION, MINS_SPACING, SLEEP_TIME
+from config import *
 
-def click_on_pixel(position):
+def clickOnPixel(position):
     """Click on a specified pixel position."""
     pyautogui.click(position[0], position[1])
-    time.sleep(SLEEP_TIME)
+    time.sleep(sleepTime)
 
-def take_screenshot(region):
+def takeScreenshot(region):
     """Take a screenshot of a specified region."""
     return pyautogui.screenshot(region=region)
 
-def find_mins_count(screenshot):
+def findMinsCount(screenshot):
     """Count occurrences of the word 'mins' in the screenshot."""
     text = pytesseract.image_to_string(screenshot)
     return len(re.findall(r'\bmins\b', text, re.IGNORECASE))
 
-def extract_numbers_from_image(screenshot):
+def extractNumbersFromImage(screenshot):
     """Extract all numbers from the screenshot."""
     text = pytesseract.image_to_string(screenshot)
     return [int(num) for num in re.findall(r'\d+', text)]
 
-def calculate_ratios(left_numbers, right_numbers):
+def calculateRatios(leftNumbers, rightNumbers):
     """Calculate the ratio of right numbers to left numbers."""
     ratios = []
-    for left, right in zip(left_numbers, right_numbers):
+    for left, right in zip(leftNumbers, rightNumbers):
         if left != 0:
             ratios.append(right / left)
         else:
@@ -35,63 +35,63 @@ def calculate_ratios(left_numbers, right_numbers):
 
 def main():
     # Click on initial positions
-    click_on_pixel(drivePos)
-    click_on_pixel(loadConsistPos)
-    click_on_pixel(consistPos)
-    click_on_pixel(continuePos)
+    clickOnPixel(drivePos)
+    clickOnPixel(loadConsistPos)
+    clickOnPixel(consistPos)
+    clickOnPixel(continuePos)
 
     # Step 1: Take a screenshot of destinations
-    destination_screenshot = take_screenshot(DESTINATION_PORTION)
+    destinationScreenshot = takeScreenshot(destinationPortion)
 
     # Step 2: Find the count of "mins"
-    mins_count = find_mins_count(destination_screenshot)
+    minsCount = findMinsCount(destinationScreenshot)
 
     # Get the position of each "mins"
-    mins_positions = []
-    for i in range(mins_count):
-        mins_positions.append((DESTINATION_PORTION[0], DESTINATION_PORTION[1] + i * MINS_SPACING))
+    minsPositions = []
+    for i in range(minsCount):
+        minsPositions.append((destinationPortion[0], destinationPortion[1] + i * minsSpacing))
 
-    highest_ratios = []
+    highestRatios = []
 
-    for pos in mins_positions:
+    for pos in minsPositions:
         # Step 3: Click on the current position of "mins"
         pyautogui.click(pos[0], pos[1])
-        time.sleep(SLEEP_TIME)
+        time.sleep(sleepTime)
 
         # Step 4: Take a screenshot of routes
-        route_screenshot = take_screenshot(ROUTE_PORTION)
+        routeScreenshot = takeScreenshot(routePortion)
 
         # Step 5: Extract numbers from the screenshot
-        numbers = extract_numbers_from_image(route_screenshot)
+        numbers = extractNumbersFromImage(routeScreenshot)
 
         # Separate into left and right numbers
-        left_numbers = numbers[0::2]  # Left numbers at even indices
-        right_numbers = numbers[1::2]  # Right numbers at odd indices
+        leftNumbers = numbers[0::2]  # Left numbers at even indices
+        rightNumbers = numbers[1::2]  # Right numbers at odd indices
 
         # Step 6: Calculate ratios
-        ratios = calculate_ratios(left_numbers, right_numbers)
+        ratios = calculateRatios(leftNumbers, rightNumbers)
 
         # Step 7: Track highest ratio and its position
         if ratios:
-            max_ratio = max(ratios)
-            max_index = ratios.index(max_ratio)
-            highest_ratios.append((max_ratio, max_index))
+            maxRatio = max(ratios)
+            maxIndex = ratios.index(maxRatio)
+            highestRatios.append((maxRatio, maxIndex))
 
-        time.sleep(SLEEP_TIME)  # Wait before the next iteration
+        time.sleep(sleepTime)  # Wait before the next iteration
 
     # Click on destination with the highest ratio
-    if highest_ratios:
-        highest_dest_index = highest_ratios.index(max(highest_ratios, key=lambda x: x[0]))
+    if highestRatios:
+        highestDestIndex = highestRatios.index(max(highestRatios, key=lambda x: x[0]))
         # Click logic to select destination can be added here
-        print(f"Clicking on destination with highest ratio at index: {highest_dest_index}")
+        print(f"Clicking on destination with highest ratio at index: {highestDestIndex}")
 
         # Click on route with highest ratio
-        highest_route_index = highest_ratios[highest_dest_index][1]
+        highestRouteIndex = highestRatios[highestDestIndex][1]
         # Click logic to select route can be added here
-        print(f"Clicking on route with highest ratio at index: {highest_route_index}")
+        print(f"Clicking on route with highest ratio at index: {highestRouteIndex}")
 
-    # Step to click on continueDrivePos
-    click_on_pixel(continuePos)
+    # Step to click on continuePos
+    clickOnPixel(continuePos)
 
     # Wait until pixel throttleRedPos has the specified RGB value
     while True:
