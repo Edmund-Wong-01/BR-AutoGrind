@@ -1,29 +1,28 @@
-
 import threading
 import keyboard
-from menu import main as start_menu
-from drive import control_train
+from menu import main as startMenu
+from drive import controlTrain
 
-def run_program():
-    while not stop_signal.is_set():
-        start_menu()  # Start the menu functionality
-        control_thread = threading.Thread(target=control_train)
-        control_thread.start()
+def runProgram():
+    while not stopSignal.is_set():
+        startMenu()  # Start the menu functionality
+        controlThread = threading.Thread(target=controlTrain)
+        controlThread.start()
 
         # Wait for the control thread to finish
-        control_thread.join()
+        controlThread.join()
 
-def listen_for_stop():
+def listenForStop():
     keyboard.wait('q')  # Wait for the user to press 'q' to stop
-    stop_signal.set()  # Signal to stop the program
+    stopSignal.set()  # Signal to stop the program
 
 if __name__ == "__main__":
-    stop_signal = threading.Event()  # Create a stop signal
-    listener_thread = threading.Thread(target=listen_for_stop)
-    listener_thread.start()  # Start the listener for the stop key
+    stopSignal = threading.Event()  # Create a stop signal
+    listenerThread = threading.Thread(target=listenForStop)
+    listenerThread.start()  # Start the listener for the stop key
 
-    run_program()  # Run the main program loop
+    runProgram()  # Run the main program loop
 
     # Wait for the listener thread to finish
-    listener_thread.join()
+    listenerThread.join()
     print("Program stopped.")
