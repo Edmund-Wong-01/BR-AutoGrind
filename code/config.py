@@ -14,14 +14,14 @@ throttleGreenRGB = (0, 255, 0)
 rgbTolerance = 10  # Example tolerance value for RGB comparisons
 
 # Rates
-decelRate = 1.5  # Example deceleration rate
+decelRate = 1.2  # Example deceleration rate
 
 # Lengths
 trainLength = 100  # Length of the train in meters
 
 # Throttle and Brake Steps
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
-brakeSteps = 5     # Steps from OFF (0) to MAX (4)
+brakeSteps = 4     # Steps from OFF (0) to MAX (4)
 
 # Portions for screenshots
 distancePortion = (100, 100, 200, 200)  # Example portion
