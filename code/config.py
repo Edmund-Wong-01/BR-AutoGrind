@@ -23,14 +23,10 @@ trainLength = 132  # Length of the train in meters
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
 brakeSteps = 4     # Steps from OFF (0) to MAX (4)
 
-# Portions for screenshots
-distancePortion = (100, 100, 200, 200)  # Example portion
+# Portions for screenshots. X, Y, Height, Width
+distancePortion = (100, 100, 200, 200)  
 currentSpeedPortion = (200, 200, 200, 200)
 speedLimitPortion = (300, 300, 200, 200)
 
-# Speeds
-currentSpeed = 0  # Initial current speed
-speedLimit = 100  # Example speed limit
-
 # Spacing
-minsSpacing = 10  # Example spacing value
+minsSpacing = 10  # Vertical spacing value between destination (menu.py)
