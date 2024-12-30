@@ -5,7 +5,7 @@ from config import *  # Import all configurations
 
 # Define throttle and brake levels
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
-brakeSteps = 4     # Steps from OFF (0) to MAX (4)
+brakeSteps = 5     # Steps from OFF (0) to MAX (4)
 
 # Initialize throttle and brake levels
 throttleLevel = 0
@@ -28,10 +28,7 @@ def calculateBrakingDistance(currentSpeed):
     return (currentSpeed ** 2) / (2 * decelRate)
 
 def controlTrain():
-    global lastStation
-
-    # Initial click to acknowledge AWS warning
-    clickPixel(AWSWarningPos)
+    global lastStation = 0
 
     # Main control loop
     while lastStation == 0:  # Repeat until lastStation is set to 1
