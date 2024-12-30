@@ -10,11 +10,9 @@ creepForwardFromBrakeSec = 1  # Time to creep forward after braking
 
 # RGB Values
 throttleRedRGB = (255, 0, 0)  # Example RGB value
-throttleGreenRGB = (0, 255, 0)
-rgbTolerance = 10  # Example tolerance value for RGB comparisons
-
+rgbTolerance = 10  
 # Rates
-decelRate = 1.2  # Example deceleration rate
+decelRate = 1.2  
 
 # Lengths
 trainLength = 132  # Length of the train in meters
