@@ -9,7 +9,7 @@ brakeSteps = 4     # Steps from OFF (0) to MAX (4)
 
 # Initialize throttle and brake levels
 throttleLevel = 0
-brakeLevel = 4
+brakeLevel = 3
 lastStation = 0  # Initialize lastStation
 
 def clickPixel(pixelPos):
