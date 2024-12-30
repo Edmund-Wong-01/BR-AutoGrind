@@ -2,10 +2,8 @@
 
 # Positions
 awsWarningPos = (100, 200)  # Example coordinates
-distancePortion = (150, 250, 300, 400)  # Example region (x, y, width, height)
-currentSpeedPortion = (200, 300, 400, 500)
-speedLimitPortion = (250, 350, 450, 550)
-trainLength = 50  # Length of the train in meters
+
+# Delays
 creepForwardFromBrakeSec = 1  # Time to creep forward after braking
 
 # RGB Values
@@ -21,7 +19,7 @@ trainLength = 132  # Length of the train in meters
 throttleSteps = 7  # Steps from OFF (0) to FULL (6)
 brakeSteps = 4     # Steps from OFF (0) to MAX (4)
 
-# Portions for screenshots. X, Y, Height, Width
+# Portions for screenshots. X, Y, Width, Height 
 distancePortion = (100, 100, 200, 200)  
 currentSpeedPortion = (200, 200, 200, 200)
 speedLimitPortion = (300, 300, 200, 200)
